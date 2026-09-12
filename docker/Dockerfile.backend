@@ -1,0 +1,35 @@
+FROM python:3.11-slim
+
+# Install system dependencies:
+#   poppler-utils     — pdf2image fallback rasteriser
+#   fonts-dejavu-core — TrueType font for certificate rendering
+#   libpq-dev + gcc   — psycopg build support for a future PostgreSQL ledger
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    poppler-utils \
+    fonts-dejavu-core \
+    libpq-dev \
+    gcc \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY backend/ .
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+    && mkdir -p storage/certificates storage/temp keys
+
+ENV PYTHONUNBUFFERED=1 \
+    FLASK_PORT=5000 \
+    LOG_FORMAT=json
+
+EXPOSE 5000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD curl -fsS http://localhost:5000/health || exit 1
+
+# Keys and the ledger are created on first start (see entrypoint.sh) so that the
+# private key never ends up baked into an image layer.
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["gunicorn", "app:create_app()", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120"]

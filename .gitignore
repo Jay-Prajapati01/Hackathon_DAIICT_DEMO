@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+venv/
+.venv/
+
+# Environment
+.env
+backend/.env
+frontend/.env
+
+# Secrets
+backend/keys/private.pem
+
+# Runtime data
+backend/storage/ledger.db
+backend/storage/ledger.db-*
+backend/storage/certificates/*
+backend/storage/temp/*
+!backend/storage/certificates/.gitkeep
+!backend/storage/temp/.gitkeep
+backend/models/*.pkl
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

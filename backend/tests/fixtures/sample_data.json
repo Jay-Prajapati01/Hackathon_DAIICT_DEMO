@@ -1,0 +1,68 @@
+{
+  "scenario_1_value_tampering": {
+    "description": "Wind certificate edited from 100 kWh to 1000 kWh after issuance",
+    "original": {
+      "cert_id": "REC-WND-2026-0091",
+      "generator_id": "WF-A-01",
+      "source_type": "Wind",
+      "energy_kwh": 100,
+      "generation_date": "2026-03-01",
+      "issuer_id": "ISSUER-GreenCert-04"
+    },
+    "tampered_energy_kwh": 1000,
+    "expected_layer_fail": "layer1_steganographic_integrity",
+    "expected_result": "FRAUD",
+    "catch_reason": "Hash mismatch — 100 vs 1000 kWh produces different SHA-256"
+  },
+  "scenario_2_duplicate_certid": {
+    "description": "Same CertID given to two buyers (Solar 1 MW)",
+    "cert_id": "REC-SLR-2026-0034",
+    "generator_id": "SP-C-01",
+    "source_type": "Solar",
+    "energy_kwh": 1000,
+    "generation_date": "2026-02-15",
+    "issuer_id": "ISSUER-SolarAuth-01",
+    "buyer_x": "BUYER-Acme-Corp",
+    "buyer_y": "BUYER-GreenTech-Ltd",
+    "expected_layer_fail": "layer3_ledger_lookup",
+    "expected_result": "FRAUD",
+    "catch_reason": "CertID already registered and claimed by Buyer X"
+  },
+  "scenario_3_value_edit": {
+    "description": "Solar certificate value edited from 500 kWh to 5000 kWh",
+    "cert_id": "REC-SLR-2026-0055",
+    "generator_id": "SP-B-01",
+    "source_type": "Solar",
+    "energy_kwh_original": 500,
+    "energy_kwh_tampered": 5000,
+    "generation_date": "2026-01-20",
+    "issuer_id": "ISSUER-SolarAuth-01",
+    "expected_layer_fail": "layer1_steganographic_integrity",
+    "expected_result": "FRAUD",
+    "catch_reason": "Hash mismatch — 500 vs 5000 kWh"
+  },
+  "scenario_4_duplicate_claim": {
+    "description": "Claimed certificate resubmitted for second claim (duplicate usage)",
+    "cert_id": "REC-WND-2026-0102",
+    "generator_id": "WF-D-01",
+    "source_type": "Wind",
+    "energy_kwh": 750,
+    "generation_date": "2026-03-10",
+    "issuer_id": "ISSUER-GreenCert-04",
+    "first_claimer": "BUYER-EcoEnergy-01",
+    "second_claimer": "BUYER-CleanPower-02",
+    "expected_layer_fail": "layer3_ledger_lookup",
+    "expected_result": "FRAUD",
+    "catch_reason": "Certificate already claimed — duplicate re-submission"
+  },
+  "scenario_valid_baseline": {
+    "description": "Clean certificate — all three layers pass",
+    "cert_id": "REC-HYD-2026-0201",
+    "generator_id": "HP-E-01",
+    "source_type": "Hydro",
+    "energy_kwh": 5000,
+    "generation_date": "2026-03-05",
+    "issuer_id": "ISSUER-HydroAuth-03",
+    "expected_result": "VALID"
+  }
+}

@@ -1,0 +1,42 @@
+# Production stack: gunicorn backend + nginx frontend, secrets from .env
+#   cp backend/.env.example .env  (then set real secrets)
+#   docker compose -f docker-compose.prod.yml up -d --build
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    env_file:
+      - path: .env
+        required: false   # create from backend/.env.example with real secrets
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=false
+      - FLASK_PORT=5000
+      - LOG_FORMAT=json
+    expose:
+      - "5000"
+    volumes:
+      - rec_storage:/app/storage
+      - rec_keys:/app/keys
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: always
+
+volumes:
+  rec_storage:
+  rec_keys:

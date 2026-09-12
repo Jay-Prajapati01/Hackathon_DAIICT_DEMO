@@ -1,0 +1,45 @@
+# Web Framework
+Flask==2.3.3
+Flask-CORS==4.0.0
+Flask-JWT-Extended==4.5.3
+gunicorn==21.2.0
+
+# Cryptography
+cryptography==41.0.7
+
+# Steganography / Image
+Pillow==10.1.0
+# stegano==0.11.2  -- dropped: requires Pillow<10 (conflicts with Pillow 10.1); LSB is implemented natively in modules/steg.py
+pdf2image==1.16.3
+PyPDF2==3.0.1
+reportlab==4.0.7
+
+# Database
+SQLAlchemy==2.0.23
+alembic==1.12.1
+
+# Validation + Config
+marshmallow==3.20.1
+python-dotenv==1.0.0
+
+# Anomaly Detection
+scikit-learn==1.3.2
+numpy==1.26.2
+pandas==2.1.3
+joblib==1.3.2
+
+# Logging
+structlog==23.2.0
+
+# Utilities
+Werkzeug==2.3.7
+click==8.1.7
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-flask==1.3.0
+
+# Dev / Linting
+black==23.11.0
+flake8==6.1.0
