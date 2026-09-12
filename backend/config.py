@@ -85,7 +85,7 @@ def anomaly_threshold() -> float:
 
 
 def cors_origins() -> list:
-    raw = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:5173")
+    raw = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:5173,https://hackathon-daiict-demo.vercel.app")
     return [o.strip() for o in raw.split(",") if o.strip()]
 
 
