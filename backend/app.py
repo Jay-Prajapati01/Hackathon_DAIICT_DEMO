@@ -105,6 +105,7 @@ def create_app(test_config: dict = None):
     return app
 
 
+app = create_app()
+
 if __name__ == "__main__":
-    app = create_app()
     app.run(host="0.0.0.0", port=flask_port(), debug=flask_debug())
